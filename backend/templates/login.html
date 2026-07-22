@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="form-card">
+  <h2>Login</h2>
+  <form method="post">
+    <label>Email</label>
+    <input type="email" name="email" required>
+    <label>Password</label>
+    <input type="password" name="password" required>
+    <button class="btn" type="submit">Login</button>
+  </form>
+  <p><a href="{{ url_for('auth.forgot_password') }}">Forgot password?</a></p>
+  <p>No account? <a href="{{ url_for('auth.register') }}">Register here</a></p>
+  <p class="hint">Demo admin login: admin@shop.com / admin123</p>
+</div>
+{% endblock %}

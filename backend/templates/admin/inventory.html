@@ -1,0 +1,29 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Inventory{% endblock %}
+{% block admin_content %}
+<h2>Inventory Management</h2>
+
+<form method="post" class="form-card">
+  <label>Product</label>
+  <select name="product_id" required>
+    {% for p in products %}
+      <option value="{{ p.product_id }}">{{ p.product_name }} (current: {{ p.stock_quantity }})</option>
+    {% endfor %}
+  </select>
+  <label>Quantity Change (use negative to reduce)</label>
+  <input type="number" name="quantity_change" required>
+  <button class="btn" type="submit">Update Stock</button>
+</form>
+
+<table class="cart-table">
+  <thead><tr><th>Product</th><th>Stock</th></tr></thead>
+  <tbody>
+    {% for p in products %}
+    <tr>
+      <td>{{ p.product_name }}</td>
+      <td class="{% if p.stock_quantity < 10 %}low{% endif %}">{{ p.stock_quantity }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

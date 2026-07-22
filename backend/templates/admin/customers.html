@@ -1,0 +1,18 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Customers{% endblock %}
+{% block admin_content %}
+<h2>Customers</h2>
+<table class="cart-table">
+  <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Joined</th></tr></thead>
+  <tbody>
+    {% for c in customers %}
+    <tr>
+      <td>{{ c.full_name }}</td>
+      <td>{{ c.email }}</td>
+      <td>{{ c.phone }}</td>
+      <td>{{ c.created_at }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

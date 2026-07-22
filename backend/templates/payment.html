@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Payment{% endblock %}
+{% block content %}
+<div class="form-card">
+  <h2>Payment for Order #{{ order.order_id }}</h2>
+  <p>Amount Due: <strong>₹{{ "%.2f"|format(order.total_amount) }}</strong></p>
+  <p>Method: {{ payment.payment_method }}</p>
+  <p>Status: {{ payment.payment_status }}</p>
+
+  {% if payment.payment_method == 'Online Payment' and payment.payment_status != 'Completed' %}
+    <form method="post">
+      <p class="hint">This is a simulated payment gateway for demo purposes.</p>
+      <label>Card Number</label>
+      <input type="text" placeholder="4242 4242 4242 4242" maxlength="19">
+      <label>Expiry</label>
+      <input type="text" placeholder="MM/YY">
+      <button class="btn" type="submit">Pay Now</button>
+    </form>
+  {% else %}
+    <p>{% if payment.payment_method == 'Cash on Delivery' %}
+      You will pay in cash upon delivery.
+    {% else %}
+      Payment already completed.
+    {% endif %}</p>
+    <a class="btn" href="{{ url_for('order.order_history') }}">Go to My Orders</a>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Products{% endblock %}
+{% block content %}
+<h2>Products</h2>
+
+<div class="filter-bar">
+  <form method="get">
+    {% if search %}<input type="hidden" name="q" value="{{ search }}">{% endif %}
+    <label>Category:</label>
+    <select name="category" onchange="this.form.submit()">
+      <option value="">All</option>
+      {% for c in categories %}
+        <option value="{{ c.category_id }}" {% if selected_category|string == c.category_id|string %}selected{% endif %}>
+          {{ c.category_name }}
+        </option>
+      {% endfor %}
+    </select>
+  </form>
+</div>
+
+<div class="product-grid">
+  {% for p in products %}
+    <div class="product-card">
+      <a href="{{ url_for('product.product_detail', product_id=p.product_id) }}">
+        <div class="product-img-placeholder">📦</div>
+        <h3>{{ p.product_name }}</h3>
+      </a>
+      <p class="category-tag">{{ p.category_name or 'Uncategorized' }}</p>
+      <p class="price">₹{{ "%.2f"|format(p.price) }}</p>
+      <p class="rating">⭐ {{ "%.1f"|format(p.average_rating) }} ({{ p.review_count }})</p>
+      <p class="stock {% if p.stock_quantity < 10 %}low{% endif %}">
+        {% if p.stock_quantity > 0 %}In stock: {{ p.stock_quantity }}{% else %}Out of stock{% endif %}
+      </p>
+      <form method="post" action="{{ url_for('cart.add_to_cart', product_id=p.product_id) }}">
+        <input type="hidden" name="quantity" value="1">
+        <button class="btn btn-small" type="submit" {% if p.stock_quantity <= 0 %}disabled{% endif %}>
+          Add to Cart
+        </button>
+      </form>
+    </div>
+  {% else %}
+    <p>No products found.</p>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Manage Products{% endblock %}
+{% block admin_content %}
+<h2>Manage Products</h2>
+
+<details class="form-card">
+  <summary class="btn btn-small">+ Add New Product</summary>
+  <form method="post" action="{{ url_for('admin.add_product') }}">
+    <label>Name</label>
+    <input type="text" name="product_name" required>
+    <label>Description</label>
+    <textarea name="description" rows="2"></textarea>
+    <label>Price</label>
+    <input type="number" step="0.01" name="price" required>
+    <label>Stock Quantity</label>
+    <input type="number" name="stock_quantity" required>
+    <label>Category</label>
+    <select name="category_id">
+      <option value="">None</option>
+      {% for c in categories %}<option value="{{ c.category_id }}">{{ c.category_name }}</option>{% endfor %}
+    </select>
+    <label>Image URL / filename</label>
+    <input type="text" name="image_url">
+    <button class="btn" type="submit">Add Product</button>
+  </form>
+</details>
+
+<table class="cart-table">
+  <thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Rating</th><th>Actions</th></tr></thead>
+  <tbody>
+    {% for p in products %}
+    <tr>
+      <td>{{ p.product_name }}</td>
+      <td>{{ p.category_name or '-' }}</td>
+      <td>₹{{ "%.2f"|format(p.price) }}</td>
+      <td class="{% if p.stock_quantity < 10 %}low{% endif %}">{{ p.stock_quantity }}</td>
+      <td>⭐ {{ "%.1f"|format(p.average_rating) }}</td>
+      <td>
+        <form method="post" action="{{ url_for('admin.delete_product', product_id=p.product_id) }}" style="display:inline">
+          <button class="btn btn-small btn-danger" type="submit" onclick="return confirm('Delete this product?')">Delete</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

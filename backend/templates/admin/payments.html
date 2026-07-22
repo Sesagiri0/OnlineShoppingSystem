@@ -1,0 +1,20 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Payments{% endblock %}
+{% block admin_content %}
+<h2>Payments</h2>
+<table class="cart-table">
+  <thead><tr><th>Order #</th><th>Customer</th><th>Method</th><th>Status</th><th>Amount</th><th>Date</th></tr></thead>
+  <tbody>
+    {% for pay in payments %}
+    <tr>
+      <td>#{{ pay.order_id }}</td>
+      <td>{{ pay.full_name }}</td>
+      <td>{{ pay.payment_method }}</td>
+      <td>{{ pay.payment_status }}</td>
+      <td>₹{{ "%.2f"|format(pay.amount) }}</td>
+      <td>{{ pay.payment_date }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

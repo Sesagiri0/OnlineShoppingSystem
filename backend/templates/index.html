@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Welcome to ShopEase</h1>
+  <p>Everything you need, delivered to your door.</p>
+  <a class="btn" href="{{ url_for('product.list_products') }}">Shop Now</a>
+</section>
+
+<section>
+  <h2>Categories</h2>
+  <div class="category-chips">
+    {% for c in categories %}
+      <a class="chip" href="{{ url_for('product.list_products', category=c.category_id) }}">{{ c.category_name }}</a>
+    {% endfor %}
+  </div>
+</section>
+
+<section>
+  <h2>Featured Products</h2>
+  <div class="product-grid">
+    {% for p in products %}
+      <div class="product-card">
+        <a href="{{ url_for('product.product_detail', product_id=p.product_id) }}">
+          <div class="product-img-placeholder">📦</div>
+          <h3>{{ p.product_name }}</h3>
+        </a>
+        <p class="price">₹{{ "%.2f"|format(p.price) }}</p>
+        <p class="rating">⭐ {{ "%.1f"|format(p.average_rating) }} ({{ p.review_count }})</p>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block admin_content %}
+<h2>Dashboard</h2>
+<div class="stat-cards">
+  <div class="stat-card"><h4>Customers</h4><p>{{ stats.total_customers }}</p></div>
+  <div class="stat-card"><h4>Products</h4><p>{{ stats.total_products }}</p></div>
+  <div class="stat-card"><h4>Orders</h4><p>{{ stats.total_orders }}</p></div>
+  <div class="stat-card"><h4>Revenue</h4><p>₹{{ "%.2f"|format(stats.total_revenue) }}</p></div>
+</div>
+
+<h3>Low Stock Alerts</h3>
+{% if low_stock %}
+<table class="cart-table">
+  <thead><tr><th>Product</th><th>Stock</th></tr></thead>
+  <tbody>
+    {% for p in low_stock %}
+    <tr><td>{{ p.product_name }}</td><td class="low">{{ p.stock_quantity }}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>All products are well stocked.</p>
+{% endif %}
+{% endblock %}

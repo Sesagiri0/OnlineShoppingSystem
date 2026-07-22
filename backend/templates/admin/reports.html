@@ -1,0 +1,49 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Reports{% endblock %}
+{% block admin_content %}
+<h2>Reports</h2>
+
+<h3>Sales — Last 30 Days</h3>
+<table class="cart-table">
+  <thead><tr><th>Date</th><th>Orders</th><th>Units Sold</th><th>Revenue</th></tr></thead>
+  <tbody>
+    {% for r in report_rows %}
+    <tr>
+      <td>{{ r.sale_date }}</td>
+      <td>{{ r.total_orders }}</td>
+      <td>{{ r.total_units_sold }}</td>
+      <td>₹{{ "%.2f"|format(r.total_revenue) }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="4">No sales in the last 30 days.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="report-columns">
+  <div>
+    <h3>Best Selling Products</h3>
+    <ul>
+      {% for b in best_sellers %}<li>{{ b.product_name }} — {{ b.units_sold }} units</li>{% endfor %}
+    </ul>
+  </div>
+  <div>
+    <h3>Top Customers</h3>
+    <ul>
+      {% for t in top_customers %}<li>{{ t.full_name }} — ₹{{ "%.2f"|format(t.total_spent) }}</li>{% endfor %}
+    </ul>
+  </div>
+  <div>
+    <h3>Revenue by Category</h3>
+    <ul>
+      {% for r in revenue_by_category %}<li>{{ r.category_name }} — ₹{{ "%.2f"|format(r.revenue) }}</li>{% endfor %}
+    </ul>
+  </div>
+</div>
+
+<h3>Low Stock Products</h3>
+<ul>{% for p in low_stock %}<li>{{ p.product_name }} — {{ p.stock_quantity }} left</li>{% endfor %}</ul>
+
+<h3>Pending Orders</h3>
+<ul>{% for o in pending_orders %}<li>Order #{{ o.order_id }} — ₹{{ "%.2f"|format(o.total_amount) }}</li>{% endfor %}</ul>
+{% endblock %}

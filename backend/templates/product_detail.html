@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}{{ product.product_name }}{% endblock %}
+{% block content %}
+<div class="product-detail">
+  <div class="product-img-placeholder large">📦</div>
+  <div class="product-info">
+    <h2>{{ product.product_name }}</h2>
+    <p class="category-tag">{{ product.category_name or 'Uncategorized' }}</p>
+    <p class="price large">₹{{ "%.2f"|format(product.price) }}</p>
+    <p class="rating">⭐ {{ "%.1f"|format(product.average_rating) }} ({{ product.review_count }} reviews)</p>
+    <p>{{ product.description }}</p>
+    <p class="stock {% if product.stock_quantity < 10 %}low{% endif %}">
+      {% if product.stock_quantity > 0 %}In stock: {{ product.stock_quantity }}{% else %}Out of stock{% endif %}
+    </p>
+    <form method="post" action="{{ url_for('cart.add_to_cart', product_id=product.product_id) }}">
+      <label>Quantity</label>
+      <input type="number" name="quantity" value="1" min="1" max="{{ product.stock_quantity }}">
+      <button class="btn" type="submit" {% if product.stock_quantity <= 0 %}disabled{% endif %}>Add to Cart</button>
+    </form>
+  </div>
+</div>
+
+<section class="reviews">
+  <h3>Reviews</h3>
+  {% for r in reviews %}
+    <div class="review">
+      <strong>{{ r.full_name }}</strong> — ⭐ {{ r.rating }}/5
+      <p>{{ r.comment }}</p>
+    </div>
+  {% else %}
+    <p>No reviews yet. Be the first to review this product!</p>
+  {% endfor %}
+
+  {% if session.get('user_id') %}
+    <form method="post" action="{{ url_for('product.add_review', product_id=product.product_id) }}" class="review-form">
+      <label>Your Rating</label>
+      <select name="rating" required>
+        <option value="5">5 - Excellent</option>
+        <option value="4">4 - Good</option>
+        <option value="3">3 - Average</option>
+        <option value="2">2 - Poor</option>
+        <option value="1">1 - Terrible</option>
+      </select>
+      <label>Comment</label>
+      <textarea name="comment" rows="2"></textarea>
+      <button class="btn btn-small" type="submit">Submit Review</button>
+    </form>
+  {% else %}
+    <p><a href="{{ url_for('auth.login') }}">Log in</a> to write a review.</p>
+  {% endif %}
+</section>
+{% endblock %}
